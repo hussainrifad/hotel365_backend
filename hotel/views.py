@@ -32,6 +32,8 @@ class BookingViewSet(ModelViewSet):
 
         if serializer.is_valid():
             customer.balance -= hotel.price
+            hotel.rooms -= 1
+            hotel.save()
             customer.save()
             booking = serializer.save()
             subject = 'Booking successfully done'
@@ -39,10 +41,27 @@ class BookingViewSet(ModelViewSet):
             email_from = settings.EMAIL_HOST_USER
             send_mail(subject, message, email_from, [customer.user.email])
             return Response({'success':'booking confirmed'})
-        
         return Response(serializer.errors)
 
-
+class HotelIsBooked(APIView):
+    def get(self, request, hotel_id, user_id):
+        try:
+            hotel = Hotel.objects.get(id = hotel_id)
+            customer = Customer.objects.get(id = user_id)
+        except Hotel.DoesNotExist:
+            hotel = None
+            customer = None
+        
+        if hotel and customer:
+            isBooked = Review.objects.get(customer=customer, hotel=hotel)
+        else:
+            isBooked = None
+        
+        if isBooked is not None:
+            return Response('yes')
+    
+        return Response('no')
+    
 class HotelReviewsView(APIView):
     
     def get(self, request, hotel_id):

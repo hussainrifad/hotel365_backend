@@ -59,6 +59,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         )
 
         user.set_password(password)
+        user.is_active = False
         user.save()
 
         customer = Customer.objects.create(

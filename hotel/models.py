@@ -22,6 +22,7 @@ class Review(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='reviews')
     created_at = models.DateTimeField(auto_now_add=True)
+    ratings = models.DecimalField(decimal_places=1, max_digits=2, null=True)
 
     def __str__(self):
         return self.hotel

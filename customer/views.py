@@ -39,7 +39,7 @@ class RegistrationApiView(APIView):
             email_body = f'Please confirm your email using this link {confirm_link}'
             email_from = settings.EMAIL_HOST_USER
             send_mail(email_subject, email_body, email_from, [user.email])
-            return Response('Check your email')
+            return Response('success')
         return Response(serializer.errors)
 
 def activate(request, uid64, token):
@@ -88,12 +88,12 @@ class CustomerLogoutView(APIView):
 class DepositeBalanceView(APIView):
     serializer_class = DepositeBalanceSerializer
 
-    def post(self, request):
+    def post(self, request, id):
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
             amount = serializer.validated_data['amount']
-            customer = Customer.objects.get(user=request.user)
+            customer = Customer.objects.get(id=id)
             customer.balance += amount
             customer.save()
             return Response({'status': 'success', 'new_balance': customer.balance}, status=status.HTTP_200_OK)
