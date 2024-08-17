@@ -5,7 +5,7 @@ from customer.models import Customer
 class Hotel(models.Model):
     name = models.CharField(max_length=128)
     rooms = models.IntegerField()
-    photo = models.ImageField(upload_to='hotel/media/images')
+    photoUrl = models.CharField(max_length=512, null=True, blank=True)
     ratings = models.DecimalField(max_digits=3, decimal_places=2)
     price = models.DecimalField(decimal_places=2, max_digits=8)
     phone = models.CharField(max_length=15)
