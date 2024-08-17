@@ -25,8 +25,8 @@ SECRET_KEY = 'django-insecure-^c#7ckscyw)r02n-@&_&+4%!%ha6chf8+mw@q%1cwtrg1&afn7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "hussainrifad.pythonanywhere.com"]
-CSRF_TRUSTED_ORIGINS = ['https://hotel-booking-backend-u4dd.onrender.com','https://*.127.0.0.1']
+ALLOWED_HOSTS = ["*"]
+CSRF_TRUSTED_ORIGINS = ['https://hussainrifad.pythonanywhere.com','https://*.127.0.0.1']
 CORS_ORIGIN_ALLOW_ALL = True
 
 

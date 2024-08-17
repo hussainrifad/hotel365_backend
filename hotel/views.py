@@ -45,22 +45,13 @@ class BookingViewSet(ModelViewSet):
 
 class HotelIsBooked(APIView):
     def get(self, request, hotel_id, user_id):
-        try:
-            hotel = Hotel.objects.get(id = hotel_id)
-            customer = Customer.objects.get(id = user_id)
-        except Hotel.DoesNotExist:
-            hotel = None
-            customer = None
         
-        if hotel and customer:
-            isBooked = Review.objects.get(customer=customer, hotel=hotel)
+        is_booked = Booking.objects.filter(hotel_id=hotel_id, customer_id=user_id).exists()
+
+        if is_booked:
+            return Response({'booked': True}, status=status.HTTP_200_OK)
         else:
-            isBooked = None
-        
-        if isBooked is not None:
-            return Response('yes')
-    
-        return Response('no')
+            return Response({'booked': False}, status=status.HTTP_200_OK)
     
 class HotelReviewsView(APIView):
     
@@ -73,3 +64,18 @@ class HotelReviewsView(APIView):
         reviews = hotel.reviews.all() 
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class CustomerBookingList(APIView):
+    
+    def get(self, request, user_id):
+        try:
+            customer = Customer.objects.get(id=user_id)
+        except Customer.DoesNotExist:
+            customer = None
+        
+        if customer is not None:
+            list = Booking.objects.filter(customer=customer)
+            print(list[0].customer.balance)
+            serialize = BookingSerializer(list, many=True)
+            return Response(serialize.data)
+        return Response([])

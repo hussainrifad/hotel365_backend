@@ -34,7 +34,7 @@ class RegistrationApiView(APIView):
             token = default_token_generator.make_token(user)
             uid = urlsafe_base64_encode(force_bytes(user.id))
 
-            confirm_link = f'http://127.0.0.1:8080/customer/active/{uid}/{token}'
+            confirm_link = f'https://hussainrifad.pythonanywhere.com/customer/active/{uid}/{token}'
             email_subject = 'Confirm your email'
             email_body = f'Please confirm your email using this link {confirm_link}'
             email_from = settings.EMAIL_HOST_USER
